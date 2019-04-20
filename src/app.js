@@ -50,6 +50,7 @@ bot.command("random", async (ctx) => {
            //activity += "<b>" + a.desc.replace(/<[^>]*>/g, '') + "<b>\n\n";
             return activity;
         }, "");
+        log.info("Reply: " + message);
         await ctx.replyWithHTML(message);
     } catch (err) {
         log.error(err);
