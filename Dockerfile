@@ -2,8 +2,6 @@ FROM timmson/mbt-platform-v2:node
 LABEL maintaner="Krotov Artem <timmson666@mail.ru>"
 
 ARG username
-ARG config_server
-ARG config_path
 
 RUN apt update && apt install -y make g++ && \
     useradd ${username} -s /bin/bash -G sudo -md /home/${username} && \
