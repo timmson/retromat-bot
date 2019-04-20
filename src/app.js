@@ -10,11 +10,11 @@ const Telegraf = require("telegraf");
 const bot = new Telegraf(config.token);
 
 const phases = [
-    "1 - Создание атмосферы",
-    "2 - Сбор информации",
-    "3 - Формирование понимания",
-    "4 - Выработка плана действий",
-    "5 - Завершение ретроспективы",
+    "1️⃣  - Создание атмосферы",
+    "2️⃣  - Сбор информации",
+    "3️⃣  - Формирование понимания",
+    "4️⃣  - Выработка плана действий",
+    "5️⃣  - Завершение ретроспективы",
     "Что-то совсем другое"
 ];
 
@@ -53,10 +53,9 @@ bot.command("random", async (ctx) => {
     try {
         let message = activities.slice(0, 5).reduce((activity, phase, i) => {
             let a = phase[getRandomInt(phase.length)];
-            activity += "<b>Стадия</b>:" + a.phase + "\n";
-            activity += "<b>Название</b>:" + a.name + "\n";
-            activity += "<b>Название</b>:" + a.name + "\n";
-            activity += "<b>Цель</b>:" + a.summary + "\n\n";
+            activity += "<b>Стадия</b>: " + a.phase + "\n";
+            activity += "<b>Название</b>: " + a.name + "\n";
+            activity += "<b>Цель</b>: " + a.summary + "\n\n";
             //activity += "<b>" + a.desc.replace(/<[^>]*>/g, "") + "<b>\n\n";
             return activity;
         }, "");
