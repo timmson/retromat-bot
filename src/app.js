@@ -36,7 +36,7 @@ function sendMessage(ctx, activities, i, size) {
         log.info("Reply by ID:" + activity.retromatId);
         let photo = photos[activity.retromatId - 1];
         log.info(photos.length);
-        if (photo.length > 0) {
+        if (photo !== undefined && photo.length > 0) {
             log.info("https://retromat.org/" + photo[0].filename);
             ctx.replyWithPhoto({
                 filename: activity.name,
@@ -76,7 +76,7 @@ request("https://retromat.org/static/lang/photos.js", async (err, response, body
         log.error(err || "error: " + (response || response.statusCode));
     } else {
         eval(body);
-        let photos = all_photos;
+        photos = all_photos;
         log.info("Loaded " + photos.length + " photos");
     }
 });
