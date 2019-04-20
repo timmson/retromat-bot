@@ -23,9 +23,8 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * (max + 1));
 }
 
-function sendMessage(ctx, activities, i) {
-    if (i < 5) {
-        i++;
+function sendMessage(ctx, activities, i, size) {
+    if (i < size) {
         let message = "";
         let activity = activities[i][getRandomInt(activities[i].length)];
         message += "<b>Стадия:</b> " + activity.phase + "\n";
@@ -34,6 +33,7 @@ function sendMessage(ctx, activities, i) {
         message += "<b>Описание:</b> " + activity.desc.replace(/<[^>]*>/g, "") + "\n";
         message += "https://retromat.org/ru/?id=" + activity.retromatId;
         log.info("Reply: " + message);
+        i++;
         ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, i), (err) => log.error(err));
     }
 }
@@ -66,7 +66,7 @@ bot.command("start", async (ctx) => {
 bot.command("random", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /random");
     try {
-        sendMessage(ctx, activities, 0);
+        sendMessage(ctx, activities, 0, 5);
     } catch (err) {
         log.error(err);
         await ctx.reply(":) Sorry");
