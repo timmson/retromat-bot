@@ -6,7 +6,7 @@ const Telegraf = require("telegraf");
 
 log.level = "info";
 
-//const Markup = require("telegraf/markup");
+const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.token);
 const parser = new Parser();
 
@@ -36,7 +36,6 @@ function sendMessage(ctx, i, size) {
         ].join("\n");
         log.info("Reply by ID:" + activity.retromatId);
         let photo = photos[activity.retromatId - 1];
-        log.info(photos.length);
         if (photo !== undefined && photo.length > 0) {
             log.info("https://retromat.org/" + photo[0].filename);
             ctx.replyWithPhoto({
@@ -85,7 +84,10 @@ request("https://retromat.org/static/lang/photos.js", async (err, response, body
 bot.command("start", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /start");
     try {
-        await ctx.reply("Ok! Send command /random to generate your retrospective plan");
+        await ctx.reply("Ok! Send command /random to generate your retrospective plan or /metaphor to get random metaphor",
+            Markup.keyboard([
+                ["/random", "/metaphor"]
+            ]).resize().extra());
     } catch (err) {
         log.error(err);
     }
