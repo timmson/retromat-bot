@@ -7,6 +7,7 @@
   "dependencies": {
     "log4js": "4.1.0",
     "request": "2.88.0",
+    "rss-parser": "3.7.0",
     "telegraf": "3.27.1"
   },
   "scripts": {

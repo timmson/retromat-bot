@@ -1,13 +1,14 @@
 const config = require("./config.js");
 const log = require("log4js").getLogger();
 const request = require("request");
-//const packageInfo = require("./package.json");
+let Parser = require('rss-parser');
+const Telegraf = require("telegraf");
 
 log.level = "info";
 
-const Telegraf = require("telegraf");
 //const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.token);
+const parser = new Parser();
 
 const phases = [
     "1️⃣  - Создание атмосферы",
@@ -94,6 +95,18 @@ bot.command("random", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /random");
     try {
         sendMessage(ctx, 0, 5);
+    } catch (err) {
+        log.error(err);
+        await ctx.reply(":) Sorry");
+    }
+});
+
+bot.command("metaphor", async (ctx) => {
+    log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /metaphor");
+    try {
+        let feed = await parser.parseURL("https://www.pinterest.ru/timmson666/retro-ideas.rss");
+        let item = feed.items[getRandomInt(feed.items.length - 1)];
+        ctx.reply(item.link);
     } catch (err) {
         log.error(err);
         await ctx.reply(":) Sorry");
