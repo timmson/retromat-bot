@@ -54,6 +54,15 @@ request("https://retromat.org/activities.json?locale=ru", async (err, response, 
     }
 });
 
+request("https://retromat.org/static/lang/photos.js", async(err, response, body) => {
+    if (err || response.statusCode !== 200) {
+        log.error(err || "error: " + (response || response.statusCode));
+    } else {
+        eval(body);
+        log.info(all_photos);
+    }
+});
+
 bot.command("start", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /start");
     try {
