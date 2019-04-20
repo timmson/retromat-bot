@@ -47,6 +47,7 @@ bot.command("random", async (ctx) => {
             let a =  phase[getRandomInt(phase.length)];
             activity += "<b>" + a.name + "<b>\n";
             activity += "<i>" + a.summary + "<i>\n";
+            log.info(activity);
            //activity += "<b>" + a.desc.replace(/<[^>]*>/g, '') + "<b>\n\n";
             return activity;
         }, "");

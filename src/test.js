@@ -15,8 +15,10 @@ request("https://retromat.org/activities.json?locale=ru", async (err, response, 
         activities[parseInt(activity.phase)].push(activity);
     });
     let message = activities.slice(0, 5).reduce((activity, phase) => {
-        let a = phase[getRandomInt(phase.length)];
-        activity += a.name + "(" + a.summary + ")\n";
+        let a =  phase[getRandomInt(phase.length)];
+        activity += "<b>" + a.name + "<b>\n";
+        activity += "<i>" + a.summary + "<i>\n\n";
+        //activity += "<b>" + a.desc.replace(/<[^>]*>/g, '') + "<b>\n\n";
         return activity;
     }, "");
     console.log(message);
