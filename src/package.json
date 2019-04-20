@@ -1,0 +1,31 @@
+{
+  "name": "retromat-bot",
+  "version": "1.0.1",
+  "description": "Bot for Retromat.org",
+  "main": "app.js",
+  "private": true,
+  "dependencies": {
+    "log4js": "4.1.0",
+    "telegraf": "3.27.1"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "node"
+  ],
+  "author": "timmson",
+  "license": "MIT",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timmson/retromat-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/timmson/retromat-bot/issues"
+  },
+  "homepage": "https://github.com/timmson/retromat-bot#readme"
+}

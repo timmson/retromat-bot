@@ -1,0 +1,12 @@
+version: '2'
+services:
+   torrent-bot:
+     image: torrent-bot
+     container_name: torrent-bot-srv
+     build:
+       context: .
+       args:
+         - username=user
+         - config_server
+         - config_path=/torrent-bot/config.js
+     restart: always
