@@ -30,11 +30,10 @@ request("https://retromat.org/activities.json?locale=ru", async (err, response, 
     } else {
         let activitiesRaw = JSON.parse(body);
         activitiesRaw.forEach((activity) => {
-            if (activities[parseInt(activity.phase)] === undefined) {
-                activities[parseInt(activity.phase)] = [];
-            }
-            activity.phase = phases[parseInt(activity.phase)];
-            activities[parseInt(activity.phase)].push(activity);
+            let phaseId = parseInt(activity.phase);
+            activity.phase = phases[phaseId];
+            activities[phaseId] = activities[phaseId] || [];
+            activities[phaseId].push(activity);
         });
         log.info("Loaded " + activities.length + " activities");
     }
