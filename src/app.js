@@ -76,8 +76,8 @@ request("https://retromat.org/static/lang/photos.js", async (err, response, body
         log.error(err || "error: " + (response || response.statusCode));
     } else {
         eval(body);
-        let photo = all_photos;
-        log.info("Loaded " + photo.length + " photos");
+        let photos = all_photos;
+        log.info("Loaded " + photos.length + " photos");
     }
 });
 
