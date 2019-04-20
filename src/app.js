@@ -23,6 +23,21 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * (max + 1));
 }
 
+function sendMessage(ctx, activities, i) {
+    if (i < 5) {
+        i++;
+        let message = "";
+        let activity = activities[i][getRandomInt(activities[i].length)];
+        message += "<b>Стадия:</b> " + activity.phase + "\n";
+        message += "<b>Название:</b> " + activity.name + "\n";
+        message += "<b>Цель:</b> " + activity.summary + "\n";
+        message += "<b>Описание:</b> " + activity.desc.replace(/<[^>]*>/g, "") + "\n";
+        message += "https://retromat.org/ru/?id=" + activity.retromatId;
+        log.info("Reply: " + message);
+        ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, i), (err) => log.error(err));
+    }
+}
+
 let activities = [];
 request("https://retromat.org/activities.json?locale=ru", async (err, response, body) => {
     if (err || response.statusCode !== 200) {
@@ -51,17 +66,7 @@ bot.command("start", async (ctx) => {
 bot.command("random", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /random");
     try {
-        activities.slice(0, 5).forEach(async (phase) => {
-                let message = "";
-                let a = phase[getRandomInt(phase.length)];
-                message += "<b>Стадия:</b> " + a.phase + "\n";
-                message += "<b>Название:</b> " + a.name + "\n";
-                message += "<b>Цель:</b> " + a.summary + "\n";
-                message += "<b>Описание:</b> " + a.desc.replace(/<[^>]*>/g, "").replace("'", "").replace("«", "\"") + "\n\n";
-                log.info("Reply: " + message);
-                await ctx.replyWithHTML(message);
-            }
-        );
+        sendMessage(ctx, activities, 0);
     } catch (err) {
         log.error(err);
         await ctx.reply(":) Sorry");
