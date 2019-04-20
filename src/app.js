@@ -23,7 +23,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * (max + 1));
 }
 
-function sendMessage(ctx, activities, i, size) {
+function sendMessage(ctx, i, size) {
     if (i < size) {
         let activity = activities[i][getRandomInt(activities[i].length - 1)];
         let message = [
@@ -42,13 +42,13 @@ function sendMessage(ctx, activities, i, size) {
                 filename: activity.name,
                 source: "https://retromat.org/" + photo[0].filename
             }).then(() =>
-                    ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, ++i, size), (err) => log.error(err)),
+                    ctx.replyWithHTML(message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err)),
                 (err) => {
                     log.error(err);
-                    ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, ++i, size), (err) => log.error(err));
+                    ctx.replyWithHTML(message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
                 })
         } else {
-            ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, ++i, size), (err) => log.error(err))
+            ctx.replyWithHTML(message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err))
         }
 
     }
@@ -93,7 +93,7 @@ bot.command("start", async (ctx) => {
 bot.command("random", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /random");
     try {
-        sendMessage(ctx, activities, 0, 5);
+        sendMessage(ctx, 0, 5);
     } catch (err) {
         log.error(err);
         await ctx.reply(":) Sorry");
