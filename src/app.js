@@ -27,7 +27,7 @@ bot.command("random", async (ctx) => {
 });
 
 bot.startPolling();
-bot.telegram.sendMessage(config.to[0].id, "Started at " + new Date()).catch((err) => log.error(err));
+bot.telegram.sendMessage(config.to.id, "Started at " + new Date()).catch((err) => log.error(err));
 
 log.info("Service has started");
 log.info("Please press [CTRL + C] to stop");
