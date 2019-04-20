@@ -25,16 +25,16 @@ function getRandomInt(max) {
 
 function sendMessage(ctx, activities, i, size) {
     if (i < size) {
-        let message = "";
-        let activity = activities[i][getRandomInt(activities[i].length)];
-        message += "<b>Стадия:</b> " + activity.phase + "\n";
-        message += "<b>Название:</b> " + activity.name + "\n";
-        message += "<b>Цель:</b> " + activity.summary + "\n";
-        message += "<b>Описание:</b> " + activity.desc.replace(/<[^>]*>/g, "") + "\n";
-        message += "https://retromat.org/ru/?id=" + activity.retromatId;
+        let activity = activities[i][getRandomInt(activities[i].length - 1)];
+        let message = [
+            "<b>Стадия:</b> " + activity.phase,
+            "<b>Название:</b> " + activity.name,
+            "<b>Цель:</b> " + activity.summary,
+            "<b>Описание:</b> " + activity.desc.replace(/<[^>]*>/g, ""),
+            "https://retromat.org/ru/?id=" + activity.retromatId
+        ].join("\n");
         log.info("Reply: " + message);
-        i++;
-        ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, i, size), (err) => log.error(err));
+        ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, i++, size), (err) => log.error(err));
     }
 }
 
