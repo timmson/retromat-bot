@@ -1,5 +1,6 @@
 const config = require("./config.js");
 const log = require("log4js").getLogger();
+const request = require("request");
 //const packageInfo = require("./package.json");
 
 log.level = "info";
@@ -7,6 +8,28 @@ log.level = "info";
 const Telegraf = require("telegraf");
 //const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.token);
+
+function getRandomInt(max) {
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max + 1));
+}
+
+let activities = [];
+request("https://retromat.org/activities.json?locale=ru", async (err, response, body) => {
+    if (err || response.statusCode !== 200) {
+        log.error(err || "error: " + (response || response.statusCode));
+    } else {
+        let activitiesRaw = JSON.parse(body);
+        let activities = [];
+        activitiesRaw.forEach((activity) => {
+            if (activities[parseInt(activity.phase)] === undefined) {
+                activities[parseInt(activity.phase)] = [];
+            }
+            activities[parseInt(activity.phase)].push(activity);
+        });
+        log.info("Loaded " + activities.length + " activities");
+    }
+});
 
 bot.command("start", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /start");
@@ -20,7 +43,14 @@ bot.command("start", async (ctx) => {
 bot.command("random", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /random");
     try {
-        await ctx.reply("Ok! Send command /random to generate your retrospective plan");
+        let message = activities.slice(0, 5).reduce((activity, phase) => {
+            let a =  phase[getRandomInt(phase.length)];
+            activity += "<b>" + a.name + "<b>\n";
+            activity += "<i>" + a.summary + "<i>\n";
+           //activity += "<b>" + a.desc.replace(/<[^>]*>/g, '') + "<b>\n\n";
+            return activity;
+        }, "");
+        await ctx.replyWithHTML(message);
     } catch (err) {
         log.error(err);
     }

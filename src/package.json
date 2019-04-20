@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "log4js": "4.1.0",
+    "request": "2.88.0",
     "telegraf": "3.27.1"
   },
   "scripts": {
