@@ -53,10 +53,10 @@ bot.command("random", async (ctx) => {
     try {
         let message = activities.slice(0, 5).reduce((activity, phase, i) => {
             let a = phase[getRandomInt(phase.length)];
-            activity += "<b>Стадия</b>: " + a.phase + "\n";
-            activity += "<b>Название</b>: " + a.name + "\n";
-            activity += "<b>Цель</b>: " + a.summary + "\n\n";
-            //activity += "<b>" + a.desc.replace(/<[^>]*>/g, "") + "<b>\n\n";
+            activity += "<b>Стадия:</b> " + a.phase + "\n";
+            activity += "<b>Название:</b> " + a.name + "\n";
+            activity += "<b>Цель:</b> " + a.summary + "\n";
+            activity += "<b>Описание:<b> " + a.desc.replace(/<[^>]*>/g, \"\") + "\n\n";
             return activity;
         }, "");
         log.info("Reply: " + message);
