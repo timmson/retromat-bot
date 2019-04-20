@@ -34,12 +34,13 @@ function sendMessage(ctx, activities, i, size) {
             "https://retromat.org/ru/?id=" + activity.retromatId
         ].join("\n");
         log.info("Reply by ID:" + activity.retromatId);
-        log.info(photos[activity.retromatId]);
-        if (photos[activity.retromatId].length > 0) {
-            log.info("https://retromat.org/" + photos[activity.retromatId][0].filename);
+        let photo = photos[activity.retromatId - 1];
+        log.info(photo);
+        if (photo.length > 0) {
+            log.info("https://retromat.org/" + photo[0].filename);
             ctx.replyWithPhoto({
                 filename: activity.name,
-                source: "https://retromat.org/" + photos[activity.retromatId][0].filename
+                source: "https://retromat.org/" + photo[0].filename
             }).then(() =>
                     ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, ++i, size), (err) => log.error(err)),
                 (err) => {
