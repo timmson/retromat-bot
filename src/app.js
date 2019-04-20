@@ -51,16 +51,17 @@ bot.command("start", async (ctx) => {
 bot.command("random", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /random");
     try {
-        let message = activities.slice(0, 5).reduce((activity, phase, i) => {
-            let a = phase[getRandomInt(phase.length)];
-            activity += "<b>Стадия:</b> " + a.phase + "\n";
-            activity += "<b>Название:</b> " + a.name + "\n";
-            activity += "<b>Цель:</b> " + a.summary + "\n";
-            activity += "<b>Описание:</b> " + a.desc.replace(/<[^>]*>/g, "").replace("'", "").replace("«", "\"") + "\n\n";
-            return activity;
-        }, "");
-        log.info("Reply: " + message);
-        await ctx.replyWithHTML(message);
+        activities.slice(0, 5).forEach(async (phase) => {
+                let message = "";
+                let a = phase[getRandomInt(phase.length)];
+                message += "<b>Стадия:</b> " + a.phase + "\n";
+                message += "<b>Название:</b> " + a.name + "\n";
+                message += "<b>Цель:</b> " + a.summary + "\n";
+                message += "<b>Описание:</b> " + a.desc.replace(/<[^>]*>/g, "").replace("'", "").replace("«", "\"") + "\n\n";
+                log.info("Reply: " + message);
+                await ctx.replyWithHTML(message);
+            }
+        );
     } catch (err) {
         log.error(err);
         await ctx.reply(":) Sorry");
