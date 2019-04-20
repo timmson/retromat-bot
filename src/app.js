@@ -56,7 +56,7 @@ bot.command("random", async (ctx) => {
             activity += "<b>Стадия:</b> " + a.phase + "\n";
             activity += "<b>Название:</b> " + a.name + "\n";
             activity += "<b>Цель:</b> " + a.summary + "\n";
-            activity += "<b>Описание:<b> " + a.desc.replace(/<[^>]*>/g, "") + "\n\n";
+            activity += "<b>Описание:<b> " + a.desc.replace(/<[^>]*>/g, "").replace("\\'", "\"") + "\n\n";
             return activity;
         }, "");
         log.info("Reply: " + message);
