@@ -34,7 +34,7 @@ function sendMessage(ctx, activities, i, size) {
             "https://retromat.org/ru/?id=" + activity.retromatId
         ].join("\n");
         log.info("Reply: " + message);
-        ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, i++, size), (err) => log.error(err));
+        ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, ++i, size), (err) => log.error(err));
     }
 }
 
