@@ -35,7 +35,7 @@ function sendMessage(ctx, activities, i, size) {
         ].join("\n");
         log.info("Reply by ID:" + activity.retromatId);
         let photo = photos[activity.retromatId - 1];
-        log.info(photo);
+        log.info(photos.length);
         if (photo.length > 0) {
             log.info("https://retromat.org/" + photo[0].filename);
             ctx.replyWithPhoto({
