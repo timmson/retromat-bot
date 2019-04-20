@@ -20,7 +20,6 @@ request("https://retromat.org/activities.json?locale=ru", async (err, response, 
         log.error(err || "error: " + (response || response.statusCode));
     } else {
         let activitiesRaw = JSON.parse(body);
-        let activities = [];
         activitiesRaw.forEach((activity) => {
             if (activities[parseInt(activity.phase)] === undefined) {
                 activities[parseInt(activity.phase)] = [];
