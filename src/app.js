@@ -9,6 +9,15 @@ const Telegraf = require("telegraf");
 //const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.token);
 
+const phases = [
+    "1 - Создание атмосферы",
+    "2 - Сбор информации",
+    "3 - Формирование понимания",
+    "4 - Выработка плана действий",
+    "5 - Завершение ретроспективы",
+    "Что-то совсем другое"
+];
+
 function getRandomInt(max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max + 1));
@@ -24,6 +33,7 @@ request("https://retromat.org/activities.json?locale=ru", async (err, response, 
             if (activities[parseInt(activity.phase)] === undefined) {
                 activities[parseInt(activity.phase)] = [];
             }
+            activity.phase = phases[parseInt(activity.phase)];
             activities[parseInt(activity.phase)].push(activity);
         });
         log.info("Loaded " + activities.length + " activities");
@@ -42,18 +52,20 @@ bot.command("start", async (ctx) => {
 bot.command("random", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /random");
     try {
-        let message = activities.slice(0, 5).reduce((activity, phase) => {
-            let a =  phase[getRandomInt(phase.length)];
-            activity += "<b>" + a.name + "<b>\n";
-            activity += "<i>" + a.summary + "<i>\n";
-            log.info(activity);
-           //activity += "<b>" + a.desc.replace(/<[^>]*>/g, '') + "<b>\n\n";
+        let message = activities.slice(0, 5).reduce((activity, phase, i) => {
+            let a = phase[getRandomInt(phase.length)];
+            activity += "<b>Стадия</b>:" + a.phase + "\n";
+            activity += "<b>Название</b>:" + a.name + "\n";
+            activity += "<b>Название</b>:" + a.name + "\n";
+            activity += "<b>Цель</b>:" + a.summary + "\n\n";
+            //activity += "<b>" + a.desc.replace(/<[^>]*>/g, "") + "<b>\n\n";
             return activity;
         }, "");
         log.info("Reply: " + message);
         await ctx.replyWithHTML(message);
     } catch (err) {
         log.error(err);
+        await ctx.reply(":) Sorry");
     }
 });
 
