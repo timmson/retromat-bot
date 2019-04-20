@@ -34,7 +34,21 @@ function sendMessage(ctx, activities, i, size) {
             "https://retromat.org/ru/?id=" + activity.retromatId
         ].join("\n");
         log.info("Reply: " + message);
-        ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, ++i, size), (err) => log.error(err));
+        if (photos[activity.retromatId] !== undefined && photos[activity.retromatId].length > 0) {
+            log.info("https://retromat.org/" + photos[activity.retromatId][0].filename);
+            ctx.replyWithPhoto({
+                filename: activity.name,
+                source: "https://retromat.org/" + photos[activity.retromatId][0].filename
+            }).then(() =>
+                    ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, ++i, size), (err) => log.error(err)),
+                (err) => {
+                    log.error(err);
+                    ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, ++i, size), (err) => log.error(err));
+                })
+        } else {
+            ctx.replyWithHTML(message).then(() => sendMessage(ctx, activities, ++i, size), (err) => log.error(err))
+        }
+
     }
 }
 
@@ -54,12 +68,14 @@ request("https://retromat.org/activities.json?locale=ru", async (err, response, 
     }
 });
 
-request("https://retromat.org/static/lang/photos.js", async(err, response, body) => {
+let photos = [];
+request("https://retromat.org/static/lang/photos.js", async (err, response, body) => {
     if (err || response.statusCode !== 200) {
         log.error(err || "error: " + (response || response.statusCode));
     } else {
         eval(body);
-        log.info(all_photos);
+        let photo = all_photos;
+        log.info("Loaded " + photo.length + " photos");
     }
 });
 
