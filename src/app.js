@@ -40,7 +40,7 @@ function sendMessage(ctx, i, size) {
             log.info("https://retromat.org/" + photo[0].filename);
             ctx.replyWithPhoto({
                 filename: activity.name,
-                url: "https://retromat.org/" + photo[0].filename
+                url: (photo[0].filename.startsWith("http") ? "" : "https://retromat.org/") + photo[0].filename
             }).then(() =>
                     ctx.replyWithHTML(message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err)),
                 (err) => {
