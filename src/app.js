@@ -94,8 +94,8 @@ bot.command("start", async (ctx) => {
     try {
         await ctx.reply("Ок!\n" +
             "/random - план ретроспективы\n" +
-            "/metaphor - метафора\n" +
-            "/question - вопрос для размыщлений"
+            "/metaphor - метафора\n"/* +
+            "/question - вопрос для размыщлений"*/
             , getGlobalKeyboard());
     } catch (err) {
         log.error(err);
