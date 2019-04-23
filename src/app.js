@@ -127,7 +127,7 @@ bot.command("metaphor", async (ctx) => {
 bot.command("question", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /question");
     try {
-        let num = getRandomInt(questions - 1);
+        let num = getRandomInt(questions.length - 1);
         await ctx.replyWithHTML("<b>Вопрос №" + num + ".</b> " + questions[num], getGlobalKeyboard());
     } catch (err) {
         log.error(err);
