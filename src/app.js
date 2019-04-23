@@ -58,7 +58,7 @@ function sendMessage(ctx, i, size) {
 
 function getGlobalKeyboard() {
     return Markup.keyboard([
-        ["/random", "/metaphor"/*, "/question"*/]
+        ["/random", "/metaphor", "/question"]
     ]).resize().extra()
 }
 
@@ -94,8 +94,8 @@ bot.command("start", async (ctx) => {
     try {
         await ctx.reply("Ок!\n" +
             "/random - план ретроспективы\n" +
-            "/metaphor - метафора\n"/* +
-            "/question - вопрос для размыщлений"*/
+            "/metaphor - метафора\n" +
+            "/question - вопрос"
             , getGlobalKeyboard());
     } catch (err) {
         log.error(err);
@@ -128,6 +128,7 @@ bot.command("question", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /question");
     try {
         let num = getRandomInt(questions.length - 1);
+        log.info(ctx.message.from.username + " [" + ctx.message.from.id + "] -> q" + num);
         await ctx.replyWithHTML("<b>Вопрос №" + num + ".</b> " + questions[num], getGlobalKeyboard());
     } catch (err) {
         log.error(err);
