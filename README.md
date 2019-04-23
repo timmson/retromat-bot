@@ -5,7 +5,7 @@ Bot for Retromat.org
 
 ```sh
 start - Start messaging
-random - Generate random plan
-metaphor - Get random metaphor
-question - Get random question
+random - Get retro plan
+metaphor - Get metaphor
+question - Get question
 ```
