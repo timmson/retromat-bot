@@ -1,4 +1,5 @@
-const config = require("./config.js");
+const config = require("./config");
+const questions = require("./questions");
 const log = require("log4js").getLogger();
 const request = require("request");
 let Parser = require('rss-parser');
@@ -55,6 +56,12 @@ function sendMessage(ctx, i, size) {
     }
 }
 
+function getGlobalKeyboard() {
+    return Markup.keyboard([
+        ["/random", "/metaphor"/*, "/question"*/]
+    ]).resize().extra()
+}
+
 let activities = [];
 request("https://retromat.org/activities.json?locale=ru", async (err, response, body) => {
     if (err || response.statusCode !== 200) {
@@ -85,10 +92,11 @@ request("https://retromat.org/static/lang/photos.js", async (err, response, body
 bot.command("start", async (ctx) => {
     log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /start");
     try {
-        await ctx.reply("Ok! Send command /random to generate your retrospective plan or /metaphor to get random metaphor",
-            Markup.keyboard([
-                ["/random", "/metaphor"]
-            ]).resize().extra());
+        await ctx.reply("Ок!\n" +
+            "/random - план ретроспективы\n" +
+            "/metaphor - метафора\n" +
+            "/question - вопрос для размыщлений"
+            , getGlobalKeyboard());
     } catch (err) {
         log.error(err);
     }
@@ -109,7 +117,18 @@ bot.command("metaphor", async (ctx) => {
     try {
         let feed = await parser.parseURL("https://www.pinterest.ru/timmson666/retro-ideas.rss");
         let item = feed.items[getRandomInt(feed.items.length - 1)];
-        ctx.reply(item.link);
+        await ctx.reply(item.link, getGlobalKeyboard());
+    } catch (err) {
+        log.error(err);
+        await ctx.reply(":) Sorry");
+    }
+});
+
+bot.command("question", async (ctx) => {
+    log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /question");
+    try {
+        let num = getRandomInt(questions - 1);
+        await ctx.replyWithHTML("<b>Вопрос №" + num + ".</b> " + questions[num], getGlobalKeyboard());
     } catch (err) {
         log.error(err);
         await ctx.reply(":) Sorry");

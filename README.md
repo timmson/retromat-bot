@@ -6,5 +6,6 @@ Bot for Retromat.org
 ```sh
 start - Start messaging
 random - Generate random plan
-metaphor - Gen random metaphor
+metaphor - Get random metaphor
+question - Get random question
 ```
