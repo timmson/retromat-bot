@@ -5,7 +5,7 @@
   "main": "app.js",
   "private": true,
   "dependencies": {
-    "log4js": "4.1.0",
+    "log4js": "4.1.1",
     "request": "2.88.0",
     "rss-parser": "3.7.0",
     "telegraf": "3.27.1"
