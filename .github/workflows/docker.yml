@@ -68,7 +68,8 @@ jobs:
 
     steps:
     - name: Webhook
-      uses: joelwmale/webhook-action@master
-      env:
-        WEBHOOK_URL: ${{ secrets.DEPLOY_HOST }}/hooks/$IMAGE_NAME
-        data: "Hello from github actions!"
+      run: curl ${{ secrets.DEPLOY_HOST }}/hooks/$IMAGE_NAME
+      #uses: joelwmale/webhook-action@master
+      #env:
+      #  WEBHOOK_URL: ${{ secrets.DEPLOY_HOST }}/hooks/$IMAGE_NAME
+      #  data: "Hello from github actions!"
