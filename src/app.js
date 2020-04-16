@@ -139,7 +139,7 @@ bot.command("question", async (ctx) => {
 bot.startPolling();
 bot.telegram.sendMessage(config.to.id, "Started at " + new Date()).catch((err) => log.error(err));
 
-log.info("Service has started");
+log.info("Service has started - v2");
 log.info("Please press [CTRL + C] to stop");
 
 process.on("SIGINT", () => {
