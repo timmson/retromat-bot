@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
-    depends: push
+    needs: push
 
     - name: Webhook
       uses: joelwmale/webhook-action@master
