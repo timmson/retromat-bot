@@ -67,6 +67,7 @@ jobs:
 
     needs: push
 
+    steps:
     - name: Webhook
       uses: joelwmale/webhook-action@master
       env:
