@@ -15,9 +15,10 @@ on:
 
 env:
   # TODO: Change variable to your image's name.
-  IMAGE_NAME: retromat-bot
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
@@ -58,3 +59,16 @@ jobs:
 
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+
+  deploy:
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    depends: push
+
+    - name: Webhook
+      uses: joelwmale/webhook-action@master
+      env:
+        WEBHOOK_URL: ${{ secrets.DEPLOY_HOST}}/hooks/${{ github.repository }}
+        data: "Hello from github actions!"
