@@ -27,7 +27,7 @@ jobs:
 
       - name: Set image name
         run: |
-          SERVICE_NAME=$(echo '${{ github.repository }}' | cut -d'_' -f2)
+          SERVICE_NAME=$(echo '${{ github.repository }}' | cut -d'/' -f2)
           echo SERVICE_NAME=$SERVICE_NAME
 
       - name: Generate config
