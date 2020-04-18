@@ -1,6 +1,5 @@
 const config = require("./config");
 const log = require("log4js").getLogger();
-const request = require("request");
 let Parser = require("rss-parser");
 const Telegraf = require("telegraf");
 
@@ -14,14 +13,7 @@ const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.token);
 const parser = new Parser();
 
-/*const phases = [
-	"1️⃣  - Создание атмосферы",
-	"2️⃣  - Сбор информации",
-	"3️⃣  - Формирование понимания",
-	"4️⃣  - Выработка плана действий",
-	"5️⃣  - Завершение ретроспективы",
-	"Что-то совсем другое"
-];*/
+
 let activities = [];
 Retromat.activities().then((res) => {
 	activities = res;
@@ -30,7 +22,17 @@ Retromat.activities().then((res) => {
 (err) => log.error(err)
 );
 
-let all_photos = [];
+let photos = [];
+Retromat.photos().then((res) => {
+	photos = res;
+	log.info("Loaded " + photos.length + " photos");
+},
+(err) => log.error(err)
+);
+
+function getGlobalKeyboard() {
+	return Markup.keyboard([["/random", "/metaphor", "/question"]]).resize().extra();
+}
 
 function sendMessage(ctx, i, size) {
 	if (i < size) {
@@ -43,7 +45,7 @@ function sendMessage(ctx, i, size) {
 			"https://retromat.org/ru/?id=" + activity.retromatId
 		].join("\n");
 		log.info("Reply by ID:" + activity.retromatId);
-		let photo = all_photos[activity.retromatId - 1];
+		let photo = photos[activity.retromatId - 1];
 		if (photo !== undefined && photo.length > 0) {
 			let fileName = (photo[0].filename.startsWith("http") ? "" : "https://retromat.org/") + photo[0].filename;
 			log.info("Image:" + fileName);
@@ -62,34 +64,6 @@ function sendMessage(ctx, i, size) {
 
 	}
 }
-
-function getGlobalKeyboard() {
-	return Markup.keyboard([["/random", "/metaphor", "/question"]]).resize().extra();
-}
-
-/*request("https://retromat.org/activities.json?locale=ru", async (err, response, body) => {
-	if (err || response.statusCode !== 200) {
-		log.error(err || "error: " + (response || response.statusCode));
-	} else {
-		let activitiesRaw = JSON.parse(body);
-		activitiesRaw.forEach((activity) => {
-			let phaseId = parseInt(activity.phase);
-			activity.phase = phases[phaseId];
-			activities[phaseId] = activities[phaseId] || [];
-			activities[phaseId].push(activity);
-		});
-		log.info("Loaded " + activities.length + " activities");
-	}
-});*/
-
-request("https://retromat.org/static/lang/photos.js", async (err, response, body) => {
-	if (err || response.statusCode !== 200) {
-		log.error(err || "error: " + (response || response.statusCode));
-	} else {
-		eval(body);
-		log.info("Loaded " + all_photos.length + " photos");
-	}
-});
 
 bot.command("start", async (ctx) => {
 	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /start");
