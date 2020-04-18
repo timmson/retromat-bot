@@ -13,7 +13,6 @@ const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.token);
 const parser = new Parser();
 
-
 let activities = [];
 Retromat.activitiesWithPhoto().then((res) => {
 	activities = res;
@@ -31,19 +30,18 @@ function sendMessage(ctx, i, size) {
 		let activity = Random.elementOf(activities[i]);
 		log.info("Reply by ID:" + activity.retromatId);
 		if (activity.photos.length > 0) {
-			let fileName = activity.photos[0];
 			log.info("Image:" + activity.photos[0]);
 			ctx.replyWithPhoto({
 				filename: activity.name,
 				url: activity.photos[0]
-			}).then(() => ctx.replyWithHTML(activity.message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err)),
+			}).then(() => ctx.replyWithHTML(activity.description).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err)),
 				(err) => {
 					log.error(err);
-					ctx.replyWithHTML(activity.message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
+					ctx.replyWithHTML(activity.description).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
 				}
 			);
 		} else {
-			ctx.replyWithHTML(activity.message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
+			ctx.replyWithHTML(activity.description).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
 		}
 
 	}
