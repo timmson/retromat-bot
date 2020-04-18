@@ -47,7 +47,7 @@ function sendMessage(ctx, i, size) {
 		log.info("Reply by ID:" + activity.retromatId);
 		let photo = photos[activity.retromatId - 1];
 		if (photo !== undefined && photo.length > 0) {
-			let fileName = (photo[0].filename.startsWith("http") ? "" : "https://retromat.org/") + photo[0].filename;
+			let fileName = photo[0];
 			log.info("Image:" + fileName);
 			ctx.replyWithPhoto({
 				filename: activity.name,
