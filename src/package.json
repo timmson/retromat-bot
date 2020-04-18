@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "lint": "npx eslint app.js ./lib ./test",
+    "lint": "npx eslint --fix app.js ./lib ./test",
     "test": "npx mocha",
     "coverage": "npx nyc mocha && npx nyc report --reporter=text-lcov > coverage.lcov"
   },

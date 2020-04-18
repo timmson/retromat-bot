@@ -24,11 +24,6 @@ const phases = [
 	"Что-то совсем другое"
 ];
 
-function getRandomInt(max) {
-	max = Math.floor(max);
-	return Math.floor(Math.random() * (max + 1));
-}
-
 function sendMessage(ctx, i, size) {
 	if (i < size) {
 		let activity = Random.getRandomElement(activities[i]);
@@ -124,9 +119,9 @@ bot.command("metaphor", async (ctx) => {
 bot.command("question", async (ctx) => {
 	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /question");
 	try {
-		let num = Random.getRandomElement(questions);
-		log.info(ctx.message.from.username + " [" + ctx.message.from.id + "] -> q" + num);
-		await ctx.replyWithHTML("<b>Вопрос №" + num + ".</b> " + questions[num], getGlobalKeyboard());
+		let question = Random.getRandomElement(questions);
+		log.info(ctx.message.from.username + " [" + ctx.message.from.id + "] -> q" + question);
+		await ctx.replyWithHTML("<b>" + question + "</b>", getGlobalKeyboard());
 	} catch (err) {
 		log.error(err);
 		await ctx.reply(":) Sorry");
