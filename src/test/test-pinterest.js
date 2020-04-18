@@ -18,9 +18,7 @@ describe("Pinterest should", () => {
 			};
 		};
 
-		const result = await Pinterest.random();
-
-		console.log(result);
+		const result = await Pinterest.random(new Parser());
 
 		expect(result.title).is.equal("three pigs");
 		expect(result.url).is.equal("https://www.pinterest.ru/pin/709317010046941950/");

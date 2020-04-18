@@ -74,7 +74,7 @@ bot.command("metaphor", async (ctx) => {
 		let item = await Pinterest.random();
 		log.info("Reply with:" + JSON.stringify(item));
 		await ctx.reply(item.url, getGlobalKeyboard());
-		await ctx.replyWithPhoto({filename: "metaphor", url: item.image, caption: item.title});
+		await ctx.replyWithPhoto({filename: "metaphor", url: item.image}, {caption: item.title});
 	} catch (err) {
 		log.error(err);
 		await ctx.reply(":) Sorry");
