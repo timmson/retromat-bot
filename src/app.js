@@ -25,25 +25,27 @@ function getGlobalKeyboard() {
 	return Markup.keyboard([["/random", "/metaphor", "/question"]]).resize().extra();
 }
 
-function sendMessage(ctx, i, size) {
+async function sendMessage(ctx, i, size) {
 	if (i < size) {
 		let activity = Random.elementOf(activities[i]);
 		log.info("Reply by ID:" + activity.retromatId);
+
 		if (activity.photos.length > 0) {
 			log.info("Image:" + activity.photos[0]);
-			ctx.replyWithPhoto({
-				filename: activity.name,
-				url: activity.photos[0]
-			}).then(() => ctx.replyWithHTML(activity.description).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err)),
-				(err) => {
-					log.error(err);
-					ctx.replyWithHTML(activity.description).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
-				}
-			);
-		} else {
-			ctx.replyWithHTML(activity.description).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
+			try {
+				await ctx.replyWithPhoto({filename: activity.name, url: activity.photos[0]});
+			} catch (err) {
+				log.error(err);
+			}
 		}
 
+		try {
+			await ctx.replyWithHTML(activity.description);
+		} catch (err) {
+			log.error(err);
+		}
+
+		return await sendMessage(ctx, ++i, size);
 	}
 }
 
@@ -59,7 +61,7 @@ bot.command("start", async (ctx) => {
 bot.command("random", async (ctx) => {
 	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /random");
 	try {
-		sendMessage(ctx, 0, 5);
+		await sendMessage(ctx, 0, 5);
 	} catch (err) {
 		log.error(err);
 		await ctx.reply(":) Sorry");
