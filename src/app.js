@@ -1,24 +1,24 @@
 const config = require("./config");
 const log = require("log4js").getLogger();
-let Parser = require("rss-parser");
 const Telegraf = require("telegraf");
 
-const Random = require("./lib/random");
+const Pinterest = require("./lib/pinterest");
 const Question = require("./lib/question");
+const Random = require("./lib/random");
 const Retromat = require("./lib/retromat");
 
 log.level = "info";
 
 const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.token);
-const parser = new Parser();
 
 let activities = [];
-Retromat.activitiesWithPhoto().then((res) => {
-	activities = res;
-	log.info("Loaded " + activities.length + " activities");
-},
-(err) => log.error(err)
+Retromat.activitiesWithPhoto().then(
+	(res) => {
+		activities = res;
+		log.info("Loaded " + activities.length + " activities");
+	},
+	(err) => log.error(err)
 );
 
 function getGlobalKeyboard() {
@@ -71,9 +71,9 @@ bot.command("random", async (ctx) => {
 bot.command("metaphor", async (ctx) => {
 	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /metaphor");
 	try {
-		let feed = await parser.parseURL("https://www.pinterest.ru/timmson666/retro-ideas.rss");
-		let item = Random.elementOf(feed.items);
-		await ctx.reply(item.link, getGlobalKeyboard());
+		let item = await Pinterest.random();
+		log.info("Reply with:" + item);
+		await ctx.replyWithPhoto({filename: "metaphor", url: item.url, caption: item.title});
 	} catch (err) {
 		log.error(err);
 		await ctx.reply(":) Sorry");

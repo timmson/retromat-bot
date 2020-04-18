@@ -4,7 +4,7 @@ require("mocha");
 
 describe("Question should", () => {
 
-	it("return random question.js", () => {
+	it("return random question", () => {
 		const result = Question.random();
 
 		expect(result).has.to.have.lengthOf.above(10);
