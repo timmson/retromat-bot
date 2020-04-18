@@ -1,11 +1,11 @@
 const config = require("./config");
-const questions = require("./questions");
 const log = require("log4js").getLogger();
 const request = require("request");
 let Parser = require("rss-parser");
 const Telegraf = require("telegraf");
 
 const Random = require("./lib/random");
+const Question = require("./lib/question");
 
 log.level = "info";
 
@@ -57,7 +57,7 @@ function sendMessage(ctx, i, size) {
 
 function getGlobalKeyboard() {
 	return Markup.keyboard([
-		["/random", "/metaphor", "/question"]
+		["/random", "/metaphor", "/question.js"]
 	]).resize().extra();
 }
 
@@ -88,7 +88,7 @@ request("https://retromat.org/static/lang/photos.js", async (err, response, body
 bot.command("start", async (ctx) => {
 	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /start");
 	try {
-		await ctx.reply("Ок!\n/random - план ретроспективы\n/metaphor - метафора\n/question - вопрос", getGlobalKeyboard());
+		await ctx.reply("Ок!\n/random - план ретроспективы\n/metaphor - метафора\n/question.js - вопрос", getGlobalKeyboard());
 	} catch (err) {
 		log.error(err);
 	}
@@ -117,9 +117,9 @@ bot.command("metaphor", async (ctx) => {
 });
 
 bot.command("question", async (ctx) => {
-	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /question");
+	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /question.js");
 	try {
-		let question = Random.getRandomElement(questions);
+		let question = Question.random();
 		log.info(ctx.message.from.username + " [" + ctx.message.from.id + "] -> q" + question);
 		await ctx.replyWithHTML("<b>" + question + "</b>", getGlobalKeyboard());
 	} catch (err) {
