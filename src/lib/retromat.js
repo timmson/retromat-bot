@@ -16,7 +16,7 @@ const normalizeUrl = (photoUrl) => (photoUrl.startsWith("http") ? "" : "https://
 class Retromat {
 
 	static async activitiesWithPhoto(req) {
-		let photos = this.photos(req);
+		let photos = await this.photos(req);
 
 		let activities = [];
 		let activitiesRaw = await this.activitiesAsRaw(req);
@@ -43,6 +43,18 @@ class Retromat {
 		return activities;
 	}
 
+	static async activities(req) {
+		let activities = [];
+		let activitiesRaw = await this.activitiesAsRaw(req);
+		activitiesRaw.forEach((activity) => {
+			let phaseId = parseInt(activity.phase);
+			activity.phase = phases[phaseId];
+			activities[phaseId] = activities[phaseId] || [];
+			activities[phaseId].push(activity);
+		});
+		return activities;
+	}
+
 	static activitiesAsRaw(req) {
 		return new Promise((resolve, reject) =>
 			request(req)("https://retromat.org/activities.json?locale=ru", (err, response, body) => {
@@ -55,18 +67,6 @@ class Retromat {
 				resolve(activities);
 			})
 		);
-	}
-
-	static async activities(req) {
-		let activities = [];
-		let activitiesRaw = await this.activitiesAsRaw(req);
-		activitiesRaw.forEach((activity) => {
-			let phaseId = parseInt(activity.phase);
-			activity.phase = phases[phaseId];
-			activities[phaseId] = activities[phaseId] || [];
-			activities[phaseId].push(activity);
-		});
-		return activities;
 	}
 
 	static photos(req) {
