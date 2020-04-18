@@ -15,30 +15,58 @@ const normalizeUrl = (photoUrl) => (photoUrl.startsWith("http") ? "" : "https://
 
 class Retromat {
 
-	/*	static async activitiesWithPhoto(req) {
-			let data = Promise.all([this.activities(req), this.photos(req)]);
-			let activities = data[0];
-			let photos = data[1];
-		}*/
+	static async activitiesWithPhoto(req) {
+		let photos = this.photos(req);
 
-	static activities(req) {
+		let activities = [];
+		let activitiesRaw = await this.activitiesAsRaw(req);
+
+		activitiesRaw.forEach((activity) => {
+			let phaseId = parseInt(activity.phase);
+			activity.phase = phases[phaseId];
+
+			activity.description = 	[
+				"<b>Стадия:</b> " + activity.phase,
+				"<b>Название:</b> " + activity.name,
+				"<b>Цель:</b> " + activity.summary,
+				"<b>Описание:</b> " + activity.desc.replace(/<[^>]*>/g, ""),
+				"https://retromat.org/ru/?id=" + activity.retromatId
+			].join("\n");
+
+			let photo = photos[activity.retromatId - 1];
+			activity.photos = (photo !== undefined ? photo : []);
+
+			activities[phaseId] = activities[phaseId] || [];
+			activities[phaseId].push(activity);
+		});
+
+		return activities;
+	}
+
+	static activitiesAsRaw(req) {
 		return new Promise((resolve, reject) =>
 			request(req)("https://retromat.org/activities.json?locale=ru", (err, response, body) => {
 				let activities = [];
 				if (err || response.statusCode !== 200) {
 					reject(err || "error: " + (response || response.statusCode));
 				} else {
-					let activitiesRaw = JSON.parse(body);
-					activitiesRaw.forEach((activity) => {
-						let phaseId = parseInt(activity.phase);
-						activity.phase = phases[phaseId];
-						activities[phaseId] = activities[phaseId] || [];
-						activities[phaseId].push(activity);
-					});
+					activities = JSON.parse(body);
 				}
 				resolve(activities);
 			})
 		);
+	}
+
+	static async activities(req) {
+		let activities = [];
+		let activitiesRaw = await this.activitiesAsRaw(req);
+		activitiesRaw.forEach((activity) => {
+			let phaseId = parseInt(activity.phase);
+			activity.phase = phases[phaseId];
+			activities[phaseId] = activities[phaseId] || [];
+			activities[phaseId].push(activity);
+		});
+		return activities;
 	}
 
 	static photos(req) {
@@ -47,9 +75,8 @@ class Retromat {
 				if (err || response.statusCode !== 200) {
 					reject(err || "error: " + (response || response.statusCode));
 				} else {
-					let all_photos = [];
-					eval(body);
-					resolve(all_photos.map(p => p.map((ps) => normalizeUrl(ps.filename))));
+					let photos = eval("let all_photos = [];\n" + body + "\nall_photos;");
+					resolve(photos.map(p => p.map((ps) => normalizeUrl(ps.filename))));
 				}
 			})
 		);

@@ -15,17 +15,9 @@ const parser = new Parser();
 
 
 let activities = [];
-Retromat.activities().then((res) => {
+Retromat.activitiesWithPhoto().then((res) => {
 	activities = res;
 	log.info("Loaded " + activities.length + " activities");
-},
-(err) => log.error(err)
-);
-
-let photos = [];
-Retromat.photos().then((res) => {
-	photos = res;
-	log.info("Loaded " + photos.length + " photos");
 },
 (err) => log.error(err)
 );
@@ -37,29 +29,21 @@ function getGlobalKeyboard() {
 function sendMessage(ctx, i, size) {
 	if (i < size) {
 		let activity = Random.elementOf(activities[i]);
-		let message = [
-			"<b>Стадия:</b> " + activity.phase,
-			"<b>Название:</b> " + activity.name,
-			"<b>Цель:</b> " + activity.summary,
-			"<b>Описание:</b> " + activity.desc.replace(/<[^>]*>/g, ""),
-			"https://retromat.org/ru/?id=" + activity.retromatId
-		].join("\n");
 		log.info("Reply by ID:" + activity.retromatId);
-		let photo = photos[activity.retromatId - 1];
-		if (photo !== undefined && photo.length > 0) {
-			let fileName = photo[0];
-			log.info("Image:" + fileName);
+		if (activity.photos.length > 0) {
+			let fileName = activity.photos[0];
+			log.info("Image:" + activity.photos[0]);
 			ctx.replyWithPhoto({
 				filename: activity.name,
-				url: fileName
-			}).then(() => ctx.replyWithHTML(message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err)),
+				url: activity.photos[0]
+			}).then(() => ctx.replyWithHTML(activity.message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err)),
 				(err) => {
 					log.error(err);
-					ctx.replyWithHTML(message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
+					ctx.replyWithHTML(activity.message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
 				}
 			);
 		} else {
-			ctx.replyWithHTML(message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
+			ctx.replyWithHTML(activity.message).then(() => sendMessage(ctx, ++i, size), (err) => log.error(err));
 		}
 
 	}
