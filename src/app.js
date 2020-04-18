@@ -5,6 +5,8 @@ const request = require("request");
 let Parser = require("rss-parser");
 const Telegraf = require("telegraf");
 
+const Random = require("./lib/random");
+
 log.level = "info";
 
 const Markup = require("telegraf/markup");
@@ -29,7 +31,7 @@ function getRandomInt(max) {
 
 function sendMessage(ctx, i, size) {
 	if (i < size) {
-		let activity = activities[i][getRandomInt(activities[i].length - 1)];
+		let activity = Random.getRandomElement(activities[i]);
 		let message = [
 			"<b>Стадия:</b> " + activity.phase,
 			"<b>Название:</b> " + activity.name,
@@ -111,7 +113,7 @@ bot.command("metaphor", async (ctx) => {
 	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /metaphor");
 	try {
 		let feed = await parser.parseURL("https://www.pinterest.ru/timmson666/retro-ideas.rss");
-		let item = feed.items[getRandomInt(feed.items.length - 1)];
+		let item = Random.getRandomElement(feed.items);
 		await ctx.reply(item.link, getGlobalKeyboard());
 	} catch (err) {
 		log.error(err);
@@ -122,7 +124,7 @@ bot.command("metaphor", async (ctx) => {
 bot.command("question", async (ctx) => {
 	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /question");
 	try {
-		let num = getRandomInt(questions.length - 1);
+		let num = Random.getRandomElement(questions);
 		log.info(ctx.message.from.username + " [" + ctx.message.from.id + "] -> q" + num);
 		await ctx.replyWithHTML("<b>Вопрос №" + num + ".</b> " + questions[num], getGlobalKeyboard());
 	} catch (err) {
