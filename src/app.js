@@ -56,9 +56,7 @@ function sendMessage(ctx, i, size) {
 }
 
 function getGlobalKeyboard() {
-	return Markup.keyboard([
-		["/random", "/metaphor", "/question.js"]
-	]).resize().extra();
+	return Markup.keyboard([["/random", "/metaphor", "/question"]]).resize().extra();
 }
 
 request("https://retromat.org/activities.json?locale=ru", async (err, response, body) => {
@@ -88,7 +86,7 @@ request("https://retromat.org/static/lang/photos.js", async (err, response, body
 bot.command("start", async (ctx) => {
 	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /start");
 	try {
-		await ctx.reply("Ок!\n/random - план ретроспективы\n/metaphor - метафора\n/question.js - вопрос", getGlobalKeyboard());
+		await ctx.reply("Ок!\n/random - план ретроспективы\n/metaphor - метафора\n/question - вопрос", getGlobalKeyboard());
 	} catch (err) {
 		log.error(err);
 	}
@@ -117,7 +115,7 @@ bot.command("metaphor", async (ctx) => {
 });
 
 bot.command("question", async (ctx) => {
-	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /question.js");
+	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /question");
 	try {
 		let question = Question.random();
 		log.info(ctx.message.from.username + " [" + ctx.message.from.id + "] -> q" + question);
