@@ -6,6 +6,7 @@ const Telegraf = require("telegraf");
 
 const Random = require("./lib/random");
 const Question = require("./lib/question");
+const Retromat = require("./lib/retromat");
 
 log.level = "info";
 
@@ -13,20 +14,27 @@ const Markup = require("telegraf/markup");
 const bot = new Telegraf(config.token);
 const parser = new Parser();
 
-let activities = [];
-let all_photos = [];
-const phases = [
+/*const phases = [
 	"1️⃣  - Создание атмосферы",
 	"2️⃣  - Сбор информации",
 	"3️⃣  - Формирование понимания",
 	"4️⃣  - Выработка плана действий",
 	"5️⃣  - Завершение ретроспективы",
 	"Что-то совсем другое"
-];
+];*/
+let activities = [];
+Retromat.activities().then((res) => {
+	activities = res;
+	log.info("Loaded " + activities.length + " activities");
+},
+(err) => log.error(err)
+);
+
+let all_photos = [];
 
 function sendMessage(ctx, i, size) {
 	if (i < size) {
-		let activity = Random.getRandomElement(activities[i]);
+		let activity = Random.elementOf(activities[i]);
 		let message = [
 			"<b>Стадия:</b> " + activity.phase,
 			"<b>Название:</b> " + activity.name,
@@ -59,7 +67,7 @@ function getGlobalKeyboard() {
 	return Markup.keyboard([["/random", "/metaphor", "/question"]]).resize().extra();
 }
 
-request("https://retromat.org/activities.json?locale=ru", async (err, response, body) => {
+/*request("https://retromat.org/activities.json?locale=ru", async (err, response, body) => {
 	if (err || response.statusCode !== 200) {
 		log.error(err || "error: " + (response || response.statusCode));
 	} else {
@@ -72,7 +80,7 @@ request("https://retromat.org/activities.json?locale=ru", async (err, response, 
 		});
 		log.info("Loaded " + activities.length + " activities");
 	}
-});
+});*/
 
 request("https://retromat.org/static/lang/photos.js", async (err, response, body) => {
 	if (err || response.statusCode !== 200) {
@@ -106,7 +114,7 @@ bot.command("metaphor", async (ctx) => {
 	log.info(ctx.message.from.username + " [" + ctx.message.from.id + "]" + " <- /metaphor");
 	try {
 		let feed = await parser.parseURL("https://www.pinterest.ru/timmson666/retro-ideas.rss");
-		let item = Random.getRandomElement(feed.items);
+		let item = Random.elementOf(feed.items);
 		await ctx.reply(item.link, getGlobalKeyboard());
 	} catch (err) {
 		log.error(err);

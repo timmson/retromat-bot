@@ -59,7 +59,7 @@ const questions = [
 class Question {
 
 	static random() {
-		return Random.getRandomElement(questions);
+		return Random.elementOf(questions);
 	}
 
 }
