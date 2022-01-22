@@ -25,7 +25,7 @@ jobs:
       run: |
         cd ./src
         npm run lint
-        npm run coverage && codecov
+        npm run coverage && npx codecov
       env:
         CI: true
         CODECOV_TOKEN: 3d3c6da1-9592-44aa-92ae-fc5045839372
