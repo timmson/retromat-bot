@@ -57,7 +57,7 @@ class Retromat {
 
 	static activitiesAsRaw(req) {
 		return new Promise((resolve, reject) =>
-			request(req)("https://retromat.org/activities.json?locale=ru", (err, response, body) => {
+			request(req)("https://retromat.org/api/activities?locale=ru", (err, response, body) => {
 				let activities = [];
 				if (err || response.statusCode !== 200) {
 					reject(err || "error: " + (response || response.statusCode));
