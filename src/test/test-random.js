@@ -1,6 +1,5 @@
 const Random = require("../lib/random");
-const {expect} = require("chai");
-require("mocha");
+
 
 describe("Random should", () => {
 
@@ -9,7 +8,7 @@ describe("Random should", () => {
 
 		const result = Random.elementOf(array);
 
-		expect(result).to.be.undefined;
+		expect(result).toBeUndefined();
 	});
 
 	it("return 'undefined' when element is not an array", () => {
@@ -17,7 +16,7 @@ describe("Random should", () => {
 
 		const result = Random.elementOf(array);
 
-		expect(result).to.be.undefined;
+		expect(result).toBeUndefined();
 	});
 
 
@@ -26,7 +25,7 @@ describe("Random should", () => {
 
 		const result = Random.elementOf(array);
 
-		expect(result).is.eq(1);
+		expect(result).toEqual(1)
 	});
 
 	it("return random array element when array is [1,2,3]", () => {
@@ -34,7 +33,7 @@ describe("Random should", () => {
 
 		const result = Random.elementOf(array);
 
-		expect(result).is.not.null;
+		expect(result).not.toBeNull();
 	});
 
 });

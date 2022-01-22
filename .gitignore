@@ -1,4 +1,5 @@
 .idea
+
+src/coverage
 src/node_modules
-src/coverage.lcov
-src/.nyc_output
+src/config.js

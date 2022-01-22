@@ -1,6 +1,4 @@
 const Retromat = require("../lib/retromat");
-const {expect} = require("chai");
-require("mocha");
 
 describe("When activities is called Retromat should", () => {
 	const arrange = [{"retromatId": 1, "phase": 0}, {"retromatId": 2, "phase": 2}];
@@ -12,9 +10,9 @@ describe("When activities is called Retromat should", () => {
 
 		try {
 			await Retromat.activities(mockRequest);
-			expect(true).to.be.false;
+			expect(true).toBeFalsy();
 		} catch (e) {
-			expect(true).to.be.true;
+			expect(true).toBeTruthy();
 		}
 
 	});
@@ -26,9 +24,9 @@ describe("When activities is called Retromat should", () => {
 
 		try {
 			await Retromat.activities(mockRequest);
-			expect(true).to.be.false;
+			expect(true).toBeFalsy();
 		} catch (e) {
-			expect(true).to.be.true;
+			expect(true).toBeTruthy();
 		}
 	});
 
@@ -40,7 +38,7 @@ describe("When activities is called Retromat should", () => {
 
 		const result = await Retromat.activities(mockRequest);
 
-		expect(result).to.have.lengthOf(3);
+		expect(result).toHaveLength(3);
 	});
 
 });
@@ -66,9 +64,9 @@ describe("When photos is called Retromat should", () => {
 
 		try {
 			await Retromat.photos(mockRequest);
-			expect(true).to.be.false;
+			expect(true).toBeFalsy();
 		} catch (e) {
-			expect(true).to.be.true;
+			expect(true).toBeTruthy();
 		}
 
 	});
@@ -80,9 +78,9 @@ describe("When photos is called Retromat should", () => {
 
 		try {
 			await Retromat.photos(mockRequest);
-			expect(true).to.be.false;
+			expect(true).toBeFalsy();
 		} catch (e) {
-			expect(true).to.be.true;
+			expect(true).toBeTruthy();
 		}
 	});
 
@@ -93,12 +91,12 @@ describe("When photos is called Retromat should", () => {
 
 		const result = await Retromat.photos(mockRequest);
 
-		expect(result).to.have.lengthOf(3);
+		expect(result).toHaveLength(3);
 
-		expect(result[0][0]).is.equal("https://retromat.org//static/images/activities/1_ESVP.jpg");
-		expect(result[0][1]).is.equal("http://test/1_ESVP_2.jpg");
-		expect(result[1]).to.be.undefined;
-		expect(result[2][0]).is.equal("http://test/2_Weather-Report.jpg");
+		expect(result[0][0]).toEqual("https://retromat.org//static/images/activities/1_ESVP.jpg");
+		expect(result[0][1]).toEqual("http://test/1_ESVP_2.jpg");
+		expect(result[1]).toBeUndefined()
+		expect(result[2][0]).toEqual("http://test/2_Weather-Report.jpg");
 	});
 
 });
