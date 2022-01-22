@@ -25,7 +25,7 @@ describe("Random should", () => {
 
 		const result = Random.elementOf(array);
 
-		expect(result).toEqual(1)
+		expect(result).toEqual(1);
 	});
 
 	it("return random array element when array is [1,2,3]", () => {

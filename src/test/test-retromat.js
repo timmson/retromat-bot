@@ -95,7 +95,7 @@ describe("When photos is called Retromat should", () => {
 
 		expect(result[0][0]).toEqual("https://retromat.org//static/images/activities/1_ESVP.jpg");
 		expect(result[0][1]).toEqual("http://test/1_ESVP_2.jpg");
-		expect(result[1]).toBeUndefined()
+		expect(result[1]).toBeUndefined();
 		expect(result[2][0]).toEqual("http://test/2_Weather-Report.jpg");
 	});
 

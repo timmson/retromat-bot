@@ -20,7 +20,6 @@ jobs:
     - name: Install
       run: |
         cd ./src
-        npm i mocha nyc codecov  -g
         npm i
     - name: Lint and coverage
       run: |
