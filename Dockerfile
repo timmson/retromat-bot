@@ -1,19 +1,11 @@
-FROM timmson/mbt-platform-v2:node
+FROM alpine
 LABEL maintaner="Krotov Artem <timmson666@mail.ru>"
 
-ARG username
-
-RUN apt update && apt install -y make g++ && \
-    useradd ${username} -s /bin/bash -G sudo -md /home/${username} && \
-    sed -i.bkp -e 's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers && \
-    mkdir /app
-
-WORKDIR /app
+ENV TZ=Europe/Moscow
+RUN apk add --update tzdata nodejs npm && cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && apk del tzdata
 
 COPY src/ .
 
-RUN npm i && chown -R ${username}:${username} .
-
-USER ${username}
+RUN npm i
 
 CMD ["npm", "start"]
