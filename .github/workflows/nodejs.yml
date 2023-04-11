@@ -9,18 +9,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+
     - name: Install
       run: |
         cd ./src
         npm i
+
     - name: Lint and coverage
       run: |
         cd ./src
@@ -29,3 +31,38 @@ jobs:
       env:
         CI: true
         CODECOV_TOKEN: 3d3c6da1-9592-44aa-92ae-fc5045839372
+
+    - name: Build image
+      run: docker-compose build
+
+    - name: Log into registry
+      if: github.ref == 'refs/heads/main'
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+    - name: Push image
+      if: github.ref == 'refs/heads/main'
+      run: |
+        # Check if it is release branch
+        if [ "${{ github.ref }}" != "refs/heads/main" ]; then 
+          echo "Skipping push phase"
+          exit 0
+        fi
+        
+        SERVICE_NAME=$(echo '${{ github.repository }}' | cut -d'/' -f2)
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$SERVICE_NAME
+        
+        # Change all uppercase to lowercase
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+        # Strip "v" prefix from tag name
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+        
+        # Use Docker `latest` tag convention
+        [ "$VERSION" == "main" ] && VERSION=latest
+        
+        docker tag $SERVICE_NAME $IMAGE_ID:$VERSION
+        docker push $IMAGE_ID:$VERSION
+
