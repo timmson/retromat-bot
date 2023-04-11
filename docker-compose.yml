@@ -1,10 +1,10 @@
 version: '2'
 services:
-   torrent-bot:
+   retromat-bot:
      image: retromat-bot
      container_name: retromat-bot-srv
      build:
        context: .
-       args:
-         - username=user
      restart: always
+     volumes:
+       - ./config:/config
