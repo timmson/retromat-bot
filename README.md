@@ -10,4 +10,3 @@ metaphor - Get metaphor
 question - Get question
 ```
 
-Node 18

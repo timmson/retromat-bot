@@ -5,10 +5,10 @@
   "main": "app.js",
   "private": true,
   "dependencies": {
-    "log4js": "6.4.0",
+    "log4js": "^6.9.1",
     "request": "^2.88.2",
     "rss-parser": "^3.13.0",
-    "telegraf": "^3.39.0"
+    "telegraf": "^3.40.0"
   },
   "scripts": {
     "lint": "npx eslint --fix app.js ./lib ./test",
@@ -24,9 +24,9 @@
   "author": "timmson",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "27.4.0",
-    "eslint": "^8.7.0",
-    "jest": "27.4.7"
+    "@types/jest": "^29.5.11",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0"
   },
   "repository": {
     "type": "git",
