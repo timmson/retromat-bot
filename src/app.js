@@ -5,7 +5,7 @@ const Telegraf = require("telegraf")
 const Pinterest = require("./lib/pinterest")
 const Question = require("./lib/question")
 const Random = require("./lib/random")
-const Retromat = require("./lib/retromat")
+const fetchActivitiesWithPhoto = require("./lib/retromat-v2").fetchActivitiesWithPhoto
 
 log.level = "info"
 
@@ -13,7 +13,7 @@ const Markup = require("telegraf/markup")
 const bot = new Telegraf(config.token)
 
 let activities = []
-Retromat.activitiesWithPhoto().then(
+fetchActivitiesWithPhoto().then(
 	(res) => {
 		activities = res
 		log.info("Loaded " + activities.length + " activities")
@@ -21,11 +21,9 @@ Retromat.activitiesWithPhoto().then(
 	(err) => log.error(err)
 )
 
-function getGlobalKeyboard() {
-	return Markup.keyboard([["/random", "/metaphor", "/question"]]).resize().extra()
-}
+const getGlobalKeyboard = () => Markup.keyboard([["/random", "/metaphor", "/question"]]).resize().extra()
 
-async function sendMessage(ctx, i, size) {
+const sendMessage = async (ctx, i, size) => {
 	if (i < size) {
 		let activity = Random.elementOf(activities[i])
 		log.info("Reply by ID:" + activity.retromatId)
