@@ -32,9 +32,6 @@ jobs:
         CI: true
         CODECOV_TOKEN: 3d3c6da1-9592-44aa-92ae-fc5045839372
 
-    - name: Build image
-      run: docker-compose build
-
     - name: Log into registry
       if: github.ref == 'refs/heads/main'
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
@@ -63,6 +60,5 @@ jobs:
         # Use Docker `latest` tag convention
         [ "$VERSION" == "main" ] && VERSION=latest
 
-        docker tag $SERVICE_NAME $IMAGE_ID:$VERSION
+        docker build -t $SERVICE_NAME $IMAGE_ID:$VERSION .
         docker push $IMAGE_ID:$VERSION
-

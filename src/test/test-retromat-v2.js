@@ -23,7 +23,7 @@ describe("Retromat should", () => {
 		try {
 			await retromat.fetchActivities()
 			expect(true).toBeFalsy()
-		} catch (e) {
+		} catch (_) {
 			expect(true).toBeTruthy()
 		}
 	})
