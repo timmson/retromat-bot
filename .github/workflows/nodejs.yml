@@ -60,5 +60,7 @@ jobs:
         # Use Docker `latest` tag convention
         [ "$VERSION" == "main" ] && VERSION=latest
 
+        echo $SERVICE_NAME $IMAGE_ID:$VERSION
+
         docker build -t $SERVICE_NAME $IMAGE_ID:$VERSION .
         docker push $IMAGE_ID:$VERSION
