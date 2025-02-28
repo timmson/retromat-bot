@@ -1,14 +1,14 @@
 {
   "name": "retromat-bot",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Bot for Retromat.org",
   "main": "app.js",
   "private": true,
   "dependencies": {
-    "axios": "^1.6.3",
+    "axios": "^1.8.1",
     "log4js": "^6.9.1",
     "rss-parser": "^3.13.0",
-    "telegraf": "^3.40.0"
+    "telegraf": "^4.16.3"
   },
   "scripts": {
     "lint": "npx eslint --fix app.js ./lib ./test",
@@ -24,8 +24,11 @@
   "author": "timmson",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^29.5.11",
-    "eslint": "^8.56.0",
+    "@eslint/eslintrc": "3.3.0",
+    "@eslint/js": "9.21.0",
+    "@types/jest": "^29.5.14",
+    "eslint": "^9.21.0",
+    "globals": "16.0.0",
     "jest": "^29.7.0"
   },
   "repository": {
